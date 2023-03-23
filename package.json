@@ -18,6 +18,7 @@
     "url": "https://github.com/Andrii-Sh/goit-js-hw-10/issues"
   },
   "dependencies": {
+    "lodash.debounce": "^4.0.8",
     "modern-normalize": "^1.1.0"
   },
   "devDependencies": {
