@@ -4,8 +4,9 @@ const debounce = require('lodash.debounce');
 
 const DEBOUNCE_DELAY = 300;
 
-
 const searchBoxEl = document.querySelector("input#search-box");
+const countryListEl = document.querySelector('ul.country-list');
+const countryInfoEl = document.querySelector('div.country-info');
 
 searchBoxEl.addEventListener('input', debounce(handleSearchBoxInput, DEBOUNCE_DELAY));
 
@@ -15,39 +16,54 @@ function handleSearchBoxInput(event) {
     countryName = event.target.value;
 
     if (!countryName) {
+        clearInterface();
         return;
     };
 
     fetchCountries(countryName)
     .then(data => {
-        // console.log(data);
-        // console.log(data[0].name);
-        console.log(data.length);
-
         if (data.length === 1) {
-            renderSingleMurkup(data);
+            clearInterface();
+            countryInfoEl.innerHTML = renderSingleMurkup(data);
         } else if (data.length > 1 && data.length <= 10) {
-            renderMultipleMurkup(data);
+            clearInterface();
+            countryListEl.innerHTML = renderMultipleMurkup(data);
+            
         } else {
+            clearInterface();
             console.log("Too many matches found. Please enter a more specific name.");
-        }    
-
-        
+        }            
      })    
-    .catch (error => {
+        .catch(error => {
+        clearInterface();
         console.log("Oops, there is no country with that name");
     });
-    
-    // console.log(fetchCountries(countryName));
 }
 
-
 function renderSingleMurkup(data) {
-    console.log("Single country: " + data[0].name.common);
+    const languages = Object.values(data[0].languages).join(', ');
+
+    return data.map(({ capital, flags, name, population }) => {
+        return `<div class="country-info__wrapper">
+            <img src="${flags.svg}" alt="Country flag" width="40" height="30" class="country-info__flag" />
+            <p class="country-info__name">${name.official}</p>
+        </div>
+        <p class="country-info__capital"><b>Capital:</b> ${capital}</p>
+        <p class="country-info__population"><b>Population:</b> ${population}</p>
+        <p class="languages"><b>Languages:</b> ${languages}</p>`
+    }).join('');  
 }
 
 function renderMultipleMurkup(data) {
-    data.forEach(element => {
-        console.log("Multiple countries: " + element.name.common);
-    });
+    return data.map(({ flags, name }) => {
+        return `<li class="country-list__item">
+                    <img src="${flags.svg}" alt="Conntry flag" width="40" height="30" class="country-list__flag">
+                    <p class="country-list__name">${name.official}</p>
+                </li>`;
+    }).join('');
+}
+
+function clearInterface() {
+    countryListEl.innerHTML = '';
+    countryInfoEl.innerHTML = '';
 }
