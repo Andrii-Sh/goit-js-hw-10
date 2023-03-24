@@ -1,6 +1,7 @@
 import './css/styles.css';
 import { fetchCountries } from "./fetchCountries";
 const debounce = require('lodash.debounce');
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 const DEBOUNCE_DELAY = 300;
 
@@ -27,16 +28,15 @@ function handleSearchBoxInput(event) {
             countryInfoEl.innerHTML = renderSingleMurkup(data);
         } else if (data.length > 1 && data.length <= 10) {
             clearInterface();
-            countryListEl.innerHTML = renderMultipleMurkup(data);
-            
+            countryListEl.innerHTML = renderMultipleMurkup(data);            
         } else {
             clearInterface();
-            console.log("Too many matches found. Please enter a more specific name.");
+            Notify.info("Too many matches found. Please enter a more specific name.");
         }            
      })    
         .catch(error => {
         clearInterface();
-        console.log("Oops, there is no country with that name");
+        Notify.failure("Oops, there is no country with that name");
     });
 }
 
