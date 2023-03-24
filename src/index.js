@@ -14,7 +14,7 @@ searchBoxEl.addEventListener('input', debounce(handleSearchBoxInput, DEBOUNCE_DE
 let countryName = '';
 
 function handleSearchBoxInput(event) {
-    countryName = event.target.value;
+    countryName = event.target.value.trim();
 
     if (!countryName) {
         clearInterface();
@@ -45,12 +45,12 @@ function renderSingleMurkup(data) {
 
     return data.map(({ capital, flags, name, population }) => {
         return `<div class="country-info__wrapper">
-            <img src="${flags.svg}" alt="Country flag" width="40" height="30" class="country-info__flag" />
-            <p class="country-info__name">${name.official}</p>
-        </div>
-        <p class="country-info__capital"><b>Capital:</b> ${capital}</p>
-        <p class="country-info__population"><b>Population:</b> ${population}</p>
-        <p class="languages"><b>Languages:</b> ${languages}</p>`
+                    <img src="${flags.svg}" alt="Country flag" width="40" height="30" class="country-info__flag" />
+                    <p class="country-info__name">${name.official}</p>
+                </div>
+                <p class="country-info__capital"><b>Capital:</b> ${capital}</p>
+                <p class="country-info__population"><b>Population:</b> ${population}</p>
+                <p class="languages"><b>Languages:</b> ${languages}</p>`
     }).join('');  
 }
 
