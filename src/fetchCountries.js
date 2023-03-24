@@ -12,6 +12,5 @@ export const fetchCountries = countryName =>
         throw new Error(response.status);
       }
       return response.json();
-      console.log(searchParams);
     });
 
